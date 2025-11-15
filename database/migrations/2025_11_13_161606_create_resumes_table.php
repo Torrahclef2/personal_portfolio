@@ -1,0 +1,42 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('resumes', function (Blueprint $table) {
+            $table->id();
+            $table->string('full_name');
+            $table->string('job_title');
+            $table->string('summary')->nullable();
+            $table->string('image')->nullable();
+            $table->string('email')->unique();
+            $table->string('phone_number')->nullable();
+            $table->string('address')->nullable();
+            $table->string('cv_link')->nullable();
+            $table->string('linkedin_link')->nullable();
+            $table->string('github_link')->nullable();
+            $table->string('age')->nullable();
+            $table->string('total_experience')->nullable();
+            $table->string('education')->nullable();
+            $table->string('total_project')->nullable();
+            $table->string('total_clients')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('resumes');
+    }
+};
