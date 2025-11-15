@@ -5,7 +5,7 @@
                         <a class="nav-link" href="{{ route('admin.dashboard') }}">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Services</a>
+                        <a class="nav-link" href="{{ route('admin.services') }}">Services</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('admin.projects') }}">Portfolio</a>

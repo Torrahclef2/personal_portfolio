@@ -48,7 +48,18 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/projects/update/{project}',[ProjectController::class, 'update'])->name('admin.projects.update');
     Route::delete('/admin/projects/delete/{project}',[ProjectController::class, 'destroy'])->name('admin.projects.destroy');
 
-    Route::resource('services', ServicesController::class);
+    // Services routes
+    Route::get('/admin/services',[ServicesController::class, 'index'])->name('admin.services');
+    Route::get('/admin/services/create',[ServicesController::class, 'create'])->name('admin.services.create');
+    Route::post('/admin/services/store',[ServicesController::class, 'store'])->name('admin.services.store');
+    Route::get('/admin/services/edit/{service}',[ServicesController::class, 'edit'])->name('admin.services.edit');
+    Route::put('/admin/services/update/{service}',[ServicesController::class, 'update'])->name('admin.services.update');
+    Route::delete('/admin/services/delete/{service}',[ServicesController::class, 'destroy'])->name('admin.services.destroy');
+
+
+
+
+
     Route::resource('socials', SocialsController::class);
     Route::resource('home-details', HomeDetailController::class)->only(['index', 'edit', 'update']);
     Route::resource('resume', ResumeController::class)->only(['index', 'edit', 'update']);
