@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
+use App\Models\Blog;
+use App\Models\Project;
+use App\Models\Services;
+
 class AuthController extends Controller
 {
     public function loginForm()
@@ -64,6 +68,11 @@ class AuthController extends Controller
     public function dashboard()
     {
         $pagetitle = "Admin | Dashboard";
-        return view('admin.dashboard', compact('pagetitle'));
+        $totalBlogs = Blog::count();
+        $totalProjects = Project::count();
+        $totalServices = Services::count();
+
+        $blogs= Blog::latest()->take(3)->get();
+        return view('admin.dashboard', compact('pagetitle','blogs', 'totalBlogs', 'totalProjects', 'totalServices'));
     }
 }

@@ -30,41 +30,43 @@ class ServicesController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
+        $validated=$request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        $request->merge(['slug' => Str::slug($request->input('title'))]);
+        $validated['slug'] = Str::slug($request->input('title'));
 
         // Generate slug if not provided
         $counter = 1;
         // Keep incrementing until slug is unique
-        while (Services::where('slug', $request->input('slug'))->exists()) {
-            $request->merge(['slug' => $request->input('slug') . '-' . $counter]);
+        while (Services::where('slug', $validated['slug'])->exists()) {
+            $validated['slug'] = $validated['slug'] . '-' . $counter;
             $counter++;
         }
 
         // Handle image upload
-        if ($request->hasFile('image')) {
+        if( $request->hasFile('image')) {
             $image      = $request->file('image');
             $imageName  = time().'_'.$image->getClientOriginalName();
             $image->move(public_path('uploads/services'), $imageName);
-            $request->merge(['image' => $imageName]);
+            $validated['image'] = $imageName;
         }
 
-        $service = Services::create($request->all());
+        $service = Services::create($validated);
         return back()->with('success', 'Service created successfully');
     }
 
-    public function edit(Services $services)
+    public function edit(Services $service)
     {
         $pagetitle = "Admin | Edit Service";
-        return view('admin.services.edit', compact('services', 'pagetitle'));
+        $service = Services::where('id', $service->id)->first();
+       
+        return view('admin.services.edit', compact('service', 'pagetitle'));
     }
 
-    public function update(Request $request, Services $services)
+    public function update(Request $request, Services $service)
     {
         $validated=$request->validate([
             'title' => 'sometimes|required|string|max:255',
@@ -72,18 +74,26 @@ class ServicesController extends Controller
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
 
-            $validated['slug'] = $services->slug;
-        if ($request->hasFile('image')) {
+        // Generate slug from title
+       $validated['slug'] = Services::where('id', $service->id)->value('slug');
+        // Handle image upload
+        if( $request->hasFile('image')) {
+
+            // Delete old image if exists
+            if ($service->image) {
+                $imagePath = public_path('uploads/services/' . $service->image);
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+            }
+
             $image      = $request->file('image');
             $imageName  = time().'_'.$image->getClientOriginalName();
             $image->move(public_path('uploads/services'), $imageName);
             $validated['image'] = $imageName;
         }
-        else {
-            $validated['image'] = $services->image;
-        }
 
-        $services->update($validated);
+        $service->update($validated);
         return back()->with('success', 'Service updated successfully');
     }
 
@@ -93,15 +103,15 @@ class ServicesController extends Controller
     //     return response()->json($services);
     // }
     
-    public function destroy(Services $services)
+    public function destroy(Services $service)
     {
-        if($services->image){
-            $imagePath = public_path('uploads/services/' . $services->image);
+        if($service->image){
+            $imagePath = public_path('uploads/services/' . $service->image);
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
         }
-        $services->delete();
+        $service->delete();
        
         return back()->with('success', 'Service deleted successfully');
     }
