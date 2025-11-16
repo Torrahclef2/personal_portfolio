@@ -21,7 +21,7 @@ use App\Http\Controllers\SocialsController;
 |
 */
 
-
+// Route::get('/login', [AuthController::class, 'loginForm'])->name('admin.login');
 Route::get('/admin', [AuthController::class, 'loginForm'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.submit');
 // Route::post('/register', [AuthController::class, 'register']);
@@ -56,12 +56,20 @@ Route::middleware('auth')->group(function () {
     Route::put('/admin/services/update/{service}',[ServicesController::class, 'update'])->name('admin.services.update');
     Route::delete('/admin/services/delete/{service}',[ServicesController::class, 'destroy'])->name('admin.services.destroy');
 
+    //Update Resume
+    Route::get('/admin/resume',[ResumeController::class, 'index'])->name('admin.resumes');
+    Route::put('/admin/resume/update',[ResumeController::class, 'update'])->name('admin.resumes.update');
 
+    // Update Contact Info
+    Route::get('/admin/contact',[ContactController::class, 'index'])->name('admin.contact');
+    Route::put('/admin/contact/update',[ContactController::class, 'update'])->name('admin.contact.update');
 
+    // Update Home Details
+    Route::get('/admin/home-details',[HomeDetailController::class, 'index'])->name('admin.home-details');
+    Route::put('/admin/home-details/update',[HomeDetailController::class, 'update'])->name('admin.home-details.update');
 
-
-    Route::resource('socials', SocialsController::class);
-    Route::resource('home-details', HomeDetailController::class)->only(['index', 'edit', 'update']);
-    Route::resource('resume', ResumeController::class)->only(['index', 'edit', 'update']);
-    Route::resource('contact', ContactController::class)->only(['index', 'edit', 'update']);
+    // Update Socials
+    Route::get('/admin/socials',[SocialsController::class, 'index'])->name('admin.socials');
+    Route::post('/admin/socials/store',[SocialsController::class, 'store'])->name('admin.socials.store');
+    Route::delete('/admin/socials/delete/{socials}',[SocialsController::class, 'destroy'])->name('admin.socials.destroy');
 });

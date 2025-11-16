@@ -7,8 +7,8 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1 class="h3 mb-0">Dashboard</h1>
         <div>
-            <a href="#" class="btn btn-sm btn-outline-secondary">Profile</a>
-            <a href="#" class="btn btn-sm btn-outline-secondary">Settings</a>
+            <a href="#" class="btn btn-sm btn-outline-secondary">Resume</a>
+            <a href="#" class="btn btn-sm btn-outline-secondary">Contact</a>
         </div>
     </div>
 

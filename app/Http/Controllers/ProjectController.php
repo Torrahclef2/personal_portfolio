@@ -92,7 +92,10 @@ class ProjectController extends Controller
         if ($request->hasFile('image')) {
             // Delete old image if exists
             if ($project->image) {
-                Storage::delete('public/uploads/projects/' . $project->image);
+                $imagePath = public_path('uploads/projects/' . $project->image);
+                    if (file_exists($imagePath)) {
+                        unlink($imagePath);
+                    }
             }
             $image      = $request->file('image');
             $imageName  = time().'_'.$image->getClientOriginalName();

@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Resume;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class ResumeController extends Controller
 {
@@ -15,7 +16,7 @@ class ResumeController extends Controller
     {
         $pagetitle = "Admin | Edit Resume";
         $resume = Resume::where('id', 1)->first();
-        return view('admin.resume.edit', compact('resume', 'pagetitle'));
+        return view('admin.resume', compact('resume', 'pagetitle'));
     }
 
     public function update(Request $request)
@@ -38,15 +39,26 @@ class ResumeController extends Controller
         'total_clients' => 'required|integer',
         ]);
 
+        $resume = Resume::where('id', 1)->first();
+        // Handle image upload
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('public/uploads/resume');
-            $validatedData['image'] = basename($imagePath);
+            // Delete old image if exists
+            if ($resume->image) {
+                $oldImagePath = public_path('uploads/resume/' . $resume->image);
+                if (file_exists($oldImagePath)) {
+                    unlink($oldImagePath);
+                }
+            }
+            $image      = $request->file('image');
+            $imageName  = time().'_'.$image->getClientOriginalName();
+            $image->move(public_path('uploads/resume'), $imageName);
+            $validatedData['image'] = $imageName;
         }
         else {
             $validatedData['image'] = Resume::where('id', 1)->first()->image;
         }
-        $resume = Resume::where('id', 1)->first();
-        $resume->update($request->all());
+        // $resume = Resume::where('id', 1)->first();
+        $resume->update($validatedData);
         return back()->with('success', 'Resume updated successfully');
     }
 }

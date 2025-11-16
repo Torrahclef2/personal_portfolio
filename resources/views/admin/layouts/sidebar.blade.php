@@ -18,9 +18,9 @@
                             My Info
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Resume</a></li>
-                            <li><a class="dropdown-item" href="#">Contact</a></li>
-                            <li><a class="dropdown-item" href="#">Home Details</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.resumes') }}">Resume</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.contact') }}">Contact</a></li>
+                            <li><a class="dropdown-item" href="{{ route('admin.home-details') }}">Home Details</a></li>
                             <li><a class="dropdown-item" href="#">Socials</a></li>
                         </ul>   
                     </li>
